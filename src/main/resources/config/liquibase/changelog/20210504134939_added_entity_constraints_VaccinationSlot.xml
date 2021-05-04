@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <!--
+        Added the constraints for entity VaccinationSlot.
+    -->
+    <changeSet id="20210504134939-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="vaccination_center_id"
+                                 baseTableName="vaccination_slot"
+                                 constraintName="fk_vaccination_slot__vaccination_center_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="vaccination_center"/>
+    </changeSet>
+</databaseChangeLog>

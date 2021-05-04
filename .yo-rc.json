@@ -42,7 +42,9 @@
     "jwtSecretKey": "NjcyYzAxMzQwYTg1YjNkYjlkYTgyNzQ5NTFkOGRlNjg5OTg0Mzg4ZGNlZTdlZTFmYjRlYzcyMjc3YjNkM2Y1YWJjNDkxOWUxZTQ4NzExMWY0NTQxZDRmNDQ2YjM2ZmViM2MyZjNkYzhmY2NmOGU3ZTVmY2Q3NzY5MjYwY2U4MDA=",
     "clientTheme": "none",
     "clientThemeVariant": "",
-    "reactive": false
+    "reactive": false,
+    "lastLiquibaseTimestamp": 1620136179000,
+    "entities": ["VaccinationCenter", "Param", "VaccinationSlot"]
   },
   "git-provider": "GitHub",
   "git-company": "Er-WaN",

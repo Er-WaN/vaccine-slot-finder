@@ -1,0 +1,3 @@
+id;name;value;description
+1;min_date_slot;2021-06-01;Date à partir de laquelle chercher les créneaux disponibles
+2;max_days_search;21;Nombre de jours pour lesquels on recherche des disponibles

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+  <head>
+    <title th:text="#{email.notifyFreeSlots.title}">Free slots available</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body>
+    <div th:each="dto: ${list}">
+      <h3 th:text="${dto.center.name}" />
+      <b>Address :</b> <span th:text="${dto.center.address}" />
+      <br />
+      <b>Link : </b><a th:href="${dto.center.reservationUrl}">Here</a>
+      <br />
+      <b>Slots :</b>
+      <ul>
+        <li th:each="entry: ${dto.slots}">
+          <b th:text="${entry.key}"></b>
+          <ul>
+            <li th:each="slot: ${entry.value}"><span th:text="${#dates.format(slot.date, 'HH:mm')}" /></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>

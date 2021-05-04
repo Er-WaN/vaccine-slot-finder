@@ -48,6 +48,9 @@ public class CacheConfiguration {
             createCache(cm, com.wandev.vaccineslotfinder.domain.User.class.getName());
             createCache(cm, com.wandev.vaccineslotfinder.domain.Authority.class.getName());
             createCache(cm, com.wandev.vaccineslotfinder.domain.User.class.getName() + ".authorities");
+            createCache(cm, com.wandev.vaccineslotfinder.domain.VaccinationCenter.class.getName());
+            createCache(cm, com.wandev.vaccineslotfinder.domain.Param.class.getName());
+            createCache(cm, com.wandev.vaccineslotfinder.domain.VaccinationSlot.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

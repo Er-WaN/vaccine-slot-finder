@@ -1,9 +1,13 @@
 package com.wandev.vaccineslotfinder.service;
 
 import com.wandev.vaccineslotfinder.domain.User;
+import com.wandev.vaccineslotfinder.service.dto.NotifyFreeSlotDTO;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Locale;
 import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,12 +71,12 @@ public class MailService {
         try {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, StandardCharsets.UTF_8.name());
             message.setTo(to);
-            message.setFrom(jHipsterProperties.getMail().getFrom());
+            message.setFrom(new InternetAddress(jHipsterProperties.getMail().getFrom(), "Vaccine Slot Finder"));
             message.setSubject(subject);
             message.setText(content, isHtml);
             javaMailSender.send(mimeMessage);
             log.debug("Sent email to User '{}'", to);
-        } catch (MailException | MessagingException e) {
+        } catch (MailException | MessagingException | UnsupportedEncodingException e) {
             log.warn("Email could not be sent to user '{}'", to, e);
         }
     }
@@ -108,5 +112,16 @@ public class MailService {
     public void sendPasswordResetMail(User user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
+    }
+
+    @Async
+    public void sendNotifyFreeSlotMail(User user, List<NotifyFreeSlotDTO> list) {
+        Locale locale = Locale.forLanguageTag(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable(USER, user);
+        context.setVariable("list", list);
+        String content = templateEngine.process("mail/notifyFreeSlots", context);
+        String subject = messageSource.getMessage("email.notifyFreeSlots.title", null, locale);
+        sendEmail(user.getEmail(), subject, content, false, true);
     }
 }

@@ -67,7 +67,7 @@ management:
 
 spring:
   application:
-    name: vaccineSlotFinder
+    name: Vaccine Slot Finder
   profiles:
     # The commented value for `active` can be replaced with valid Spring profiles to load.
     # Otherwise, it will be filled in by maven when building the JAR file
@@ -155,7 +155,7 @@ jhipster:
   #   allow-credentials: true
   #   max-age: 1800
   mail:
-    from: vaccineSlotFinder@localhost
+    from: vaccineSlotFinder@wandev.com
   api-docs:
     default-include-pattern: ${server.servlet.context-path:}/api/.*
     management-include-pattern: ${server.servlet.context-path:}/management/.*
