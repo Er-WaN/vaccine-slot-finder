@@ -28,26 +28,62 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+/**
+ * Find free vaccination slot from Doctolib API
+ */
 @Service
 @Transactional
 public class FindSlotService {
 
+    /**
+     * Logger
+     */
     private final Logger log = LoggerFactory.getLogger(FindSlotService.class);
 
+    /**
+     * Mail Service
+     */
     private final MailService mailService;
 
+    /**
+     * Vaccination Center Repository
+     */
     private final VaccinationCenterRepository vaccinationCenterRepository;
 
+    /**
+     * Params Repository
+     */
     private final ParamRepository paramRepository;
 
+    /**
+     * Vaccination Slot Repository
+     */
     private final VaccinationSlotRepository vaccinationSlotRepository;
 
+    /**
+     * User Repository
+     */
     private final UserRepository userRepository;
 
+    /**
+     * Date format for only hours
+     */
     private final SimpleDateFormat dateHourFormat = new SimpleDateFormat("hh:mm");
 
+    /**
+     * Date format
+     */
     private final SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+    /**
+     * Constructor
+     *
+     * @param mailService Mail Service
+     * @param vaccinationCenterRepository Vaccination Center Repository
+     * @param paramRepository Params Repository
+     * @param vaccinationSlotRepository Vaccination Slot Repository
+     * @param userRepository User Repository
+     */
     public FindSlotService(
         MailService mailService,
         VaccinationCenterRepository vaccinationCenterRepository,
@@ -62,11 +98,16 @@ public class FindSlotService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Find free vaccination slot from Doctolib API
+     *
+     * @throws ParseException If date from API non parsable
+     */
     @Scheduled(cron = "${findslot-delay}")
     public void findSlot() throws ParseException {
-        List<NotifyFreeSlotDTO> newFreeSlotsList = new ArrayList<>();
+        final List<NotifyFreeSlotDTO> newFreeSlotsList = new ArrayList<>();
         boolean notifyEmail = false;
-        Instant creationDate = Instant.now();
+        final Instant creationDate = Instant.now();
 
         // 1 - Recover vaccination center
         List<VaccinationCenter> vaccinationCenters = vaccinationCenterRepository.findByEnabledTrue();
@@ -91,11 +132,13 @@ public class FindSlotService {
             DoctolibResponse result = new RestTemplate().getForObject(finalUrl, DoctolibResponse.class);
             log.info("Availabilities : {}", result.getAvailabilities() != null ? result.getAvailabilities().size() : "NONE");
 
+            // Only if free slots
             if (!CollectionUtils.isEmpty(result.getAvailabilities())) {
                 List<VaccinationSlot> slots = vaccinationSlotRepository.findVaccinationSlotByAlreadyTakenFalseAndVaccinationCenter(
                     vaccinationCenter
                 );
 
+                // Loop over availibilitires
                 for (DoctolibResponse.Availability availability : result
                     .getAvailabilities()
                     .stream()
